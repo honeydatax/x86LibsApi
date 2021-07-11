@@ -1,5 +1,5 @@
 org 0x0
 bits 32
 main:
-	add eax,ebx
+	mov eax,30
 ret
