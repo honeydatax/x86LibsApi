@@ -1,2 +1,2 @@
 # armLibsApi
-Basic lib to run flat arm32
+Basic lib to run flat x86 32bits
