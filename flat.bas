@@ -2,32 +2,30 @@ public const savemem =97
 public sub syscalls cdecl()
 	print "system call ver 1.0"
 end sub
-public function connects(ax as integer,bx as integer,cx as integer,dx as integer)as integer
-	dim mems as byte ptr
+public function on_runs(files as string,ax as integer,bx as integer,cx as integer,dx as integer)as integer
 	dim syscallss as sub 
+	dim mems as integer ptr
 	dim n as integer
 	dim f as integer
 	dim sub1 as function(as integer,as integer,as integer,as integer)as integer
 	dim ddx as integer
-
-	color 15,5
-	cls
+	dim nn as integer
 	f=freefile()
-	open "file.api" for binary as f
+	open files for binary as f
 	n=lof(f)
 	mems=allocate(n+savemem)
 	get #f,1,*mems,n
 	close f
-	
+
 	sub1=cast(function(as integer,as integer,as integer,as integer)as integer,mems)
 	syscallss=procptr(syscalls)
 	ddx=cast(integer,syscallss)
-	n=sub1(ax,bx,cx,ddx)
-	print n
+	nn=sub1(ax,bx,cx,ddx)
+	print nn
 	deallocate(mems)
 	system()
-	return ddx
+	return nn
 end function
 
 dim dx as integer
-connects 10,20,0,dx 
+on_runs ("file.api",10,20,0,dx)
