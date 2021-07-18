@@ -4,9 +4,11 @@ main:
 	mov eax,[esp+4]
 	mov ebx,[esp+8]
 	mov ecx,[esp+12]
-	mov edx,[esp+16]
-	add eax,ebx
+	mov esi,[esp+16]
+	push esi
+	push ecx
+	push ebx
 	push eax
-	call edx
-	pop eax
+	call esi
+	add esp,16
 ret
