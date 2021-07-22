@@ -58,15 +58,10 @@ loop1:
 	cmp eax,27
 	jnz loop1
 exitss:
-	add esp,32
 	mov edi,[esp+4]
+	add esp,32
 	mov eax,19
-	push edi
-	push ecx
-	push ebx
-	push eax
 	call edi
-	add esp,16
 ret
 system_call dd 0
 hello db "press esc key to exit",0
