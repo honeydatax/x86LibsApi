@@ -1,10 +1,15 @@
 public const savemem =97
+dim shared mems as integer ptr
 dim shared xx as integer
 dim shared yy as integer
 dim shared cccolors as integer
 dim shared ddx as integer
 dim shared ddxx as integer
 
+public sub exits()
+	deallocate(mems)
+	system()
+end sub
 public function iinkey() as integer
 	dim r as integer
 	r=asc(inkey())
@@ -100,11 +105,11 @@ public function syscalls cdecl(byval r0 as integer,byval r1 as integer,byval r2 
 	if r0 = 16 then stringdraw(r1)
 	if r0 = 17 then llocate(r1,r2,r3)
 	if r0 = 18 then rr=iinkey()
+	if r0 = 19 then exits()
 	return rr
 end function
 public function on_runs(files as string,ax as integer,bx as integer,cx as integer,dx as integer)as integer
 	dim syscallss as function (as integer,as integer,as integer,as integer)as integer
-	dim mems as integer ptr
 	dim n as integer
 	dim f as integer
 	dim sub1 as function(as integer,as integer,as integer,as integer)as integer
