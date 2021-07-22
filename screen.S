@@ -61,6 +61,10 @@ exitss:
 	mov edi,[esp+4]
 	add esp,32
 	mov eax,19
+	push edx
+	push ecx
+	push ebx
+	push eax
 	call edi
 ret
 system_call dd 0
