@@ -1,3 +1,5 @@
+#include once "execs.bi"
+#include "string.bi"
 public const savemem =97
 dim shared mems as integer ptr
 dim shared sh as integer
@@ -7,6 +9,78 @@ dim shared cccolors as integer
 dim shared ddx as integer
 dim shared ddxx as integer
 
+public function strcmp (aw as integer, aaw as integer)as integer
+	dim aww as integer
+	dim aaww as integer
+	dim z0 as zstring ptr
+	dim z2 as zstring ptr
+	dim z1 as zstring ptr
+	dim ll as integer
+	aww=ddxx+aw
+	aaww=ddxx+aaw
+	z0=cast(zstring ptr,aww)
+	z1=cast(zstring ptr,aaww)
+	if *z2=*z1 then ll=0
+	if *z1>*z2 then ll=1
+	if *z1<*z2 then ll=-1
+	return ll
+end function 
+public function strlen (byval aw as integer)as integer
+	dim ll as integer
+	dim aww as integer
+	dim z0 as zstring ptr
+	aww=ddxx+aw
+	z0=cast(zstring ptr,aww)
+	ll=len(*z0)
+	return ll
+end function 
+public sub strcat (aw as integer, aaw as integer)
+	dim aww as integer
+	dim aaww as integer
+	dim z0 as zstring ptr
+	dim z2 as zstring ptr
+	dim z1 as zstring ptr
+	dim ll as integer
+	aww=ddxx+aw
+	aaww=ddxx+aaw
+	z0=cast(zstring ptr,aww)
+	z1=cast(zstring ptr,aaww)
+	ll=len(*z0)
+	aww=ddxx+aw+ll
+	z2=cast(zstring ptr,aww)
+	*z2=>*z1
+end sub 
+public sub strcopy (aw as integer, aaw as integer)
+	dim aww as integer
+	dim aaww as integer
+	dim z0 as zstring ptr
+	dim z1 as zstring ptr
+	aww=ddxx+aw
+	aaww=ddxx+aaw
+	z0=cast(zstring ptr,aww)
+	z1=cast(zstring ptr,aaww)
+	*z0=>*z1
+end sub 
+public function nots(r1 as integer)as integer
+	dim i as integer
+	i=not(r1)
+	return i
+end function
+public function xors(r1 as integer,r2 as integer)as integer
+	dim i as integer
+	i=(r1 xor r2)
+	return i
+end function
+public function ands(r1 as integer,r2 as integer)as integer
+	dim i as integer
+	i=(r1 and r2)
+	return i
+end function
+public function ors(r1 as integer,r2 as integer)as integer
+	dim i as integer
+	i=(r1 or r2)
+	return i
+end function
 public function lesss(r1 as integer,r2 as integer)as integer
 	dim i as integer
 	i=(r1<r2)
@@ -56,7 +130,7 @@ public sub numbers(r1 as integer)
 end sub
 
 public sub exits()
-	deallocate(mems)
+	ddeallocate(mems,sh+savemem)
 	system()
 end sub
 public function iinkey() as integer
@@ -164,6 +238,14 @@ public function syscalls cdecl(byval r0 as integer,byval r1 as integer,byval r2 
 	if r0 = 26 then rr=diferent(r1,r2)
 	if r0 = 27 then rr=bigs(r1,r2)
 	if r0 = 28 then rr=lesss(r1,r2)
+	if r0 = 29 then rr=ors(r1,r2)
+	if r0 = 30 then rr=ands(r1,r2)
+	if r0 = 31 then rr=xors(r1,r2)
+	if r0 = 32 then rr=nots(r1)
+	if r0 = 33 then strcopy(r1,r2)
+	if r0 = 34 then strcat(r1,r2)
+	if r0 = 35 then rr=strlen(r1)
+	if r0 = 36 then rr=strcmp(r1,r2)
 	return rr
 end function
 public function on_runs(files as string,ax as integer,bx as integer,cx as integer,dx as integer)as integer
@@ -177,7 +259,12 @@ public function on_runs(files as string,ax as integer,bx as integer,cx as intege
 	open files for binary as f
 	n=lof(f)
 	sh=n
+#ifdef __FB_DOS__
 	mems=allocate(n+savemem)
+#else
+	mems=aallocate(n+savemem)
+#endif 
+
 	if mems <> -1 then get #f,1,*mems,n
 	close f
 
@@ -190,7 +277,11 @@ public function on_runs(files as string,ax as integer,bx as integer,cx as intege
 	else
 		print "error:"
 	end if
+#ifdef __FB_DOS__
 	deallocate(mems)
+#else
+	ddeallocate(mems,n+savemem)
+#endif 	
 	system()
 	return nn
 end function
