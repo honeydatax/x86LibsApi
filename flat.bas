@@ -1,4 +1,7 @@
-#include once "execs.bi"
+#ifdef __FB_DOS__
+#else
+	#include once "execs.bi"
+#endif 	
 #include "string.bi"
 public const savemem =97
 dim shared mems as integer ptr
