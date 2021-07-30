@@ -130,7 +130,11 @@ public sub numbers(r1 as integer)
 end sub
 
 public sub exits()
+#ifdef __FB_DOS__
+	deallocate(mems)
+#else
 	ddeallocate(mems,sh+savemem)
+#endif 	
 	system()
 end sub
 public function iinkey() as integer
