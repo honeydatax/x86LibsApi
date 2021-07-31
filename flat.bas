@@ -13,6 +13,15 @@ dim shared cccolors as integer
 dim shared ddx as integer
 dim shared ddxx as integer
 
+public sub rread (byval aw as integer, ffile as integer,sizes as integer)
+	dim fffile as integer
+	dim aww as integer
+	dim z0 as zstring ptr
+	dim z1 as string
+	aww=ddxx+aw
+	z0=cast(zstring ptr,aww)
+	get #ffile,,*z0,sizes
+end sub
 public function oopen (byval aw as integer)as integer
 	dim ffile as integer
 	dim fffile as integer
@@ -304,6 +313,7 @@ public function syscalls cdecl(byval r0 as integer,byval r1 as integer,byval r2 
 	if r0 = 39 then rr=oopen(r1)
 	if r0 = 40 then wwrite(r1,r2,r3)
 	if r0 = 41 then cclose(r1)
+	if r0 = 42 then rread(r1,r2,r3)
 	return rr
 end function
 public function on_runs(files as string,ax as integer,bx as integer,cx as integer,dx as integer)as integer
