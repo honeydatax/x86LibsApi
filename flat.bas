@@ -3,6 +3,7 @@
 	#include once "execs.bi"
 #endif 	
 #include "string.bi"
+#include "file.bi"
 public const savemem =97
 dim shared mems as integer ptr
 dim shared sh as integer
@@ -12,6 +13,31 @@ dim shared cccolors as integer
 dim shared ddx as integer
 dim shared ddxx as integer
 
+public function oopen (byval aw as integer)as integer
+	dim ffile as integer
+	dim fffile as integer
+	dim aww as integer
+	dim z0 as zstring ptr
+	ffile=-1
+	aww=ddxx+aw
+	z0=cast(zstring ptr,aww)
+		fffile=freefile()
+		open *z0 for binary as fffile
+		ffile=fffile
+	return ffile
+end function 
+public sub wwrite (byval aw as integer, ffile as integer,sizes as integer)
+	dim fffile as integer
+	dim aww as integer
+	dim z0 as zstring ptr
+	dim z1 as string
+	aww=ddxx+aw
+	z0=cast(zstring ptr,aww)
+	Put #ffile,,*z0,sizes
+end sub
+public sub cclose (ffile as integer)
+	close ffile
+end sub
 public sub mmids (aw as integer,start as integer,sizes as integer)
 	dim aww as integer
 	dim aaww as integer
@@ -275,6 +301,9 @@ public function syscalls cdecl(byval r0 as integer,byval r1 as integer,byval r2 
 	if r0 = 36 then rr=strcmp(r1,r2)
 	if r0 = 37 then sstrings(r1,r2,r3)
 	if r0 = 38 then mmids(r1,r2,r3)
+	if r0 = 39 then rr=oopen(r1)
+	if r0 = 40 then wwrite(r1,r2,r3)
+	if r0 = 41 then cclose(r1)
 	return rr
 end function
 public function on_runs(files as string,ax as integer,bx as integer,cx as integer,dx as integer)as integer
